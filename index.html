@@ -81,9 +81,10 @@
 
                 const handleHashChange = () => {
                     const hash = window.location.hash.substring(1);
-                    if (hash && initialStoriesData.some(story => story.id === hash)) {
+                    const foundStory = initialStoriesData.find(story => story.id === hash);
+                    if (hash && foundStory) { // Check if hash exists AND story is found
                         setCurrentPage('story');
-                        setSelectedStory(initialStoriesData.find(story => story.id === hash));
+                        setSelectedStory(foundStory);
                     } else {
                         setCurrentPage('home');
                         setSelectedStory(null);
@@ -91,18 +92,18 @@
                 };
 
                 window.addEventListener('hashchange', handleHashChange);
-                handleHashChange();
+                handleHashChange(); // Call on initial load
                 return () => {
                     window.removeEventListener('hashchange', handleHashChange);
                 };
-            }, []);
+            }, []); // Empty dependency array means this runs once on mount
 
             const navigateToStory = useCallback((storyId) => {
-                window.location.hash = storyId;
+                window.location.hash = storyId; // Update URL hash for simple routing
             }, []);
 
             const navigateToHome = useCallback(() => {
-                window.location.hash = '';
+                window.location.hash = ''; // Clear URL hash
                 setCurrentPage('home');
                 setSelectedStory(null);
             }, []);

@@ -76,36 +76,50 @@
             const [stories, setStories] = useState([]);
             const [selectedStory, setSelectedStory] = useState(null);
 
+            // This useEffect handles the initial load and hash changes
             useEffect(() => {
-                setStories(initialStoriesData); // Use the embedded data
+                setStories(initialStoriesData); // Set stories from embedded data
 
                 const handleHashChange = () => {
-                    const hash = window.location.hash.substring(1);
-                    const foundStory = initialStoriesData.find(story => story.id === hash);
-                    if (hash && foundStory) { // Check if hash exists AND story is found
-                        setCurrentPage('story');
-                        setSelectedStory(foundStory);
+                    const hash = window.location.hash.substring(1); // Get hash without '#'
+                    if (hash) {
+                        const foundStory = initialStoriesData.find(story => story.id === hash);
+                        if (foundStory) {
+                            setCurrentPage('story');
+                            setSelectedStory(foundStory);
+                        } else {
+                            // If hash exists but story not found, go to home
+                            setCurrentPage('home');
+                            setSelectedStory(null);
+                        }
                     } else {
+                        // If no hash, go to home
                         setCurrentPage('home');
                         setSelectedStory(null);
                     }
                 };
 
+                // Add event listener for hash changes
                 window.addEventListener('hashchange', handleHashChange);
-                handleHashChange(); // Call on initial load
+                // Call handler immediately on component mount to check initial URL
+                handleHashChange();
+
+                // Cleanup function to remove event listener when component unmounts
                 return () => {
                     window.removeEventListener('hashchange', handleHashChange);
                 };
-            }, []); // Empty dependency array means this runs once on mount
+            }, []); // Empty dependency array means this effect runs only once on mount
 
+            // Function to navigate to a story page by updating the URL hash
             const navigateToStory = useCallback((storyId) => {
-                window.location.hash = storyId; // Update URL hash for simple routing
+                window.location.hash = storyId; // This triggers the handleHashChange useEffect
             }, []);
 
+            // Function to navigate back to the homepage by clearing the URL hash
             const navigateToHome = useCallback(() => {
-                window.location.hash = ''; // Clear URL hash
-                setCurrentPage('home');
-                setSelectedStory(null);
+                window.location.hash = ''; // This triggers the handleHashChange useEffect
+                setCurrentPage('home'); // Also explicitly set page to home
+                setSelectedStory(null); // Clear selected story
             }, []);
 
             const Header = () => (
@@ -116,9 +130,9 @@
                         </a>
                         <ul className="flex space-x-6">
                             <li><a href="#" onClick={navigateToHome} className="text-gray-300 hover:text-blue-400 text-lg font-medium transition-colors duration-300">Home</a></li>
-                            <li><a href="#stories" onClick={() => { /* Placeholder */ }} className="text-gray-300 hover:text-blue-400 text-lg font-medium transition-colors duration-300">Stories</a></li>
-                            <li><a href="#about" onClick={() => { /* Placeholder */ }} className="text-gray-300 hover:text-blue-400 text-lg font-medium transition-colors duration-300">About</a></li>
-                            <li><a href="#contact" onClick={() => { /* Placeholder */ }} className="text-gray-300 hover:text-blue-400 text-lg font-medium transition-colors duration-300">Contact</a></li>
+                            <li><a href="#stories" onClick={() => { /* Placeholder for future 'All Stories' page */ }} className="text-gray-300 hover:text-blue-400 text-lg font-medium transition-colors duration-300">Stories</a></li>
+                            <li><a href="#about" onClick={() => { /* Placeholder for future 'About' page */ }} className="text-gray-300 hover:text-blue-400 text-lg font-medium transition-colors duration-300">About</a></li>
+                            <li><a href="#contact" onClick={() => { /* Placeholder for future 'Contact' page */ }} className="text-gray-300 hover:text-blue-400 text-lg font-medium transition-colors duration-300">Contact</a></li>
                         </ul>
                     </nav>
                 </header>

@@ -112,16 +112,17 @@
 
             // Function to navigate to a story page by updating the URL hash
             const navigateToStory = useCallback((storyId) => {
-                window.location.hash = storyId; // This updates the URL hash
-                // Crucial: Manually call handleHashChange immediately to force state update
-                // This bypasses potential delays in the browser's hashchange event firing
-                const hash = window.location.hash.substring(1);
-                const foundStory = initialStoriesData.find(story => story.id === hash);
-                if (hash && foundStory) {
+                // Update URL hash. This will also trigger the hashchange event listener.
+                window.location.hash = storyId;
+
+                // Manually update state immediately to force content change for smoother UX.
+                // This bypasses potential delays in the browser's hashchange event firing.
+                const foundStory = initialStoriesData.find(story => story.id === storyId);
+                if (foundStory) {
                     setCurrentPage('story');
                     setSelectedStory(foundStory);
                 } else {
-                    setCurrentPage('home');
+                    setCurrentPage('home'); // If storyId is invalid, go home
                     setSelectedStory(null);
                 }
             }, []); // No need for initialStoriesData in dependencies here as it's a const outside.
@@ -173,7 +174,7 @@
                             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
                                 Explore a collection of AI-assisted flash fiction, weaving tales of past, present, and future in a single, captivating breath.
                             </p>
-                            <a href="#" onClick={() => navigateToStory(stories[0]?.id || '')} className="inline-block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105">
+                            <a href={"#" + (stories[0]?.id || '')} onClick={() => navigateToStory(stories[0]?.id || '')} className="inline-block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105">
                                 Begin Your Journey
                             </a>
                         </div>
@@ -192,7 +193,7 @@
                                             <div className="p-6">
                                                 <h3 className="text-2xl font-semibold text-white mb-2">{story.title}</h3>
                                                 <p className="text-gray-400 text-sm mb-4">{story.subtitle}</p>
-                                                <a href="#" onClick={() => navigateToStory(story.id)} className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300">Read More &rarr;</a>
+                                                <a href={"#" + story.id} onClick={() => navigateToStory(story.id)} className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300">Read More &rarr;</a>
                                             </div>
                                         </div>
                                     ))}

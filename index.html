@@ -112,12 +112,23 @@
 
             // Function to navigate to a story page by updating the URL hash
             const navigateToStory = useCallback((storyId) => {
-                window.location.hash = storyId; // This triggers the handleHashChange useEffect
-            }, []);
+                window.location.hash = storyId; // This updates the URL hash
+                // Crucial: Manually call handleHashChange immediately to force state update
+                // This bypasses potential delays in the browser's hashchange event firing
+                const hash = window.location.hash.substring(1);
+                const foundStory = initialStoriesData.find(story => story.id === hash);
+                if (hash && foundStory) {
+                    setCurrentPage('story');
+                    setSelectedStory(foundStory);
+                } else {
+                    setCurrentPage('home');
+                    setSelectedStory(null);
+                }
+            }, []); // No need for initialStoriesData in dependencies here as it's a const outside.
 
             // Function to navigate back to the homepage by clearing the URL hash
             const navigateToHome = useCallback(() => {
-                window.location.hash = ''; // This triggers the handleHashChange useEffect
+                window.location.hash = ''; // This updates the URL hash
                 setCurrentPage('home'); // Also explicitly set page to home
                 setSelectedStory(null); // Clear selected story
             }, []);

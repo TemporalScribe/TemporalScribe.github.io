@@ -579,3 +579,4 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Root element not found. React app cannot mount.");
     }
 });
+                 //

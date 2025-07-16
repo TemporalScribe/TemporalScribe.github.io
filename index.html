@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Temporal Echoes – Story Viewer</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #story-container {
+      margin-top: 30px;
+    }
+
+    .story {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .story h2 {
+      margin-top: 0;
+    }
+
+    #fileInput {
+      margin-top: 20px;
+      display: block;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      text-align: center;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📖 Temporal Echoes</h1>
+  <p><strong>Current source:</strong> <span id="source-label">Local stories.json</span></p>
+
+  <input type="file" id="fileInput" accept=".json" />
+  <div id="story-container"></div>
+
+  <footer>
+    &copy; 2024 Temporal Echoes Prototype
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
